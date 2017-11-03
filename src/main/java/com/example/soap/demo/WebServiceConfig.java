@@ -1,5 +1,7 @@
 package com.example.soap.demo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +17,15 @@ import org.springframework.xml.xsd.XsdSchema;
 @EnableWs
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
+
+    static Logger log = LoggerFactory.getLogger(WebServiceConfig.class.getName());
+
     @Bean
     public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
         servlet.setTransformWsdlLocations(true);
+        log.info("Created servlet registration bean.");
         return new ServletRegistrationBean(servlet, "/ws/*");
     }
 
@@ -30,6 +36,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         wsdl11Definition.setLocationUri("/ws");
         wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
         wsdl11Definition.setSchema(helloSchema);
+        log.info("Created default Wsdl11Definition bean,");
         return wsdl11Definition;
     }
 
